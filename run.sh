@@ -227,9 +227,11 @@ getSrcCode()
 
 getHeaderCode()
 {
+    [ $srcFileExt == "c" ] && pp='' || pp='PP'
+
     if [ $guard == "ifndef" ]; then
-        guard_top="#ifndef ${1^^}_H\n#define ${1^^}_H\n\n"
-        guard_bottom="\n\n#endif // ${1^^}_H"
+        guard_top="#ifndef ${1^^}_H$pp\n#define ${1^^}_H$pp\n\n"
+        guard_bottom="\n\n#endif // ${1^^}_H$pp"
     else
         guard_top="#pragma once\n\n"
         guard_bottom=""
