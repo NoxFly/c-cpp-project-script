@@ -25,7 +25,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.0.3
+version=0.0.4
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -469,16 +469,16 @@ launch()
 	echo -e "\033[0m"
 
     if [ $res -eq 0 ]; then
-        cd "$outDir/$mode/"
+        cd "$outDir/"
 
         if [ $verbose -eq 1 ]; then
             echo -e "\n\033[0;32mCompilation succeed\033[0m\n"
             echo -e "----- Executing ${mode^^} mode -----\n\n"
         fi
         if [ $pseudoMode == "debug" ]; then
-            gdb ./$pgname $@
+            gdb ./$mode/$pgname $@
         else
-            ./$pgname $@
+            ./$mode/$pgname $@
         fi
     else
         echo -e "\n\033[0;31mCompilation failed\033[0m\n"
