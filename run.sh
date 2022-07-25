@@ -25,7 +25,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.0.5
+version=0.0.6
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -34,7 +34,7 @@ guard="ifndef" # ifndef | pragma
 # PROJECT MODE :
 # 0: src/ClassName.cpp include/ClassName.hpp
 # 1: src/ClassDir/ClassName.cpp src/ClassDir/ClassName.hpp
-projectMode=1
+projectMode=0
 
 # if any mode is precised, then release is the default one
 mode="dev"
@@ -134,7 +134,7 @@ getHelp()
 
 createClass()
 {
-    if [[ ! $1 =~ ^[a-zA-Z_]+$ ]]; then
+    if [[ ! $1 =~ ^[a-zA-Z_][a-zA-Z0-9_]+$ ]]; then
         echo "Error : class name must only contains alphanumeric characters and underscores"
     else
         echo "Creating class $1..."
@@ -215,9 +215,9 @@ createBaseProject() {
 getSrcCode()
 {
     if [ $srcFileExt == "c" ]; then
-        echo -e -n "#include \"$1.h\"\n\n"
+        echo -e -n "#include \"$1.$hdrFileExt\"\n\n"
     else
-        echo -e -n "#include \"$1.h\"\n\n$1::$1() {\n\n}\n\n$1::~$1() {\n\n}"
+        echo -e -n "#include \"$1.$hdrFileExt\"\n\n$1::$1() {\n\n}\n\n$1::~$1() {\n\n}"
     fi
 }
 
