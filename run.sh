@@ -25,7 +25,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.0.6
+version=0.0.7
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -37,9 +37,14 @@ guard="ifndef" # ifndef | pragma
 projectMode=0
 
 # if any mode is precised, then release is the default one
-mode="dev"
+mode="debug"
+# makefile rule, depending on the mode
+rule="build"
 # project folder's name is the default application's name
-pgname=${PWD##*/}
+pgname="NoxEngine"
+
+ext=""
+os="linux"
 
 #
 updateUrl="https://raw.githubusercontent.com/NoxFly/c-cpp-project-script/main/run.sh"
@@ -66,8 +71,9 @@ All added options not handled by the script will be executable's options.
 --swap-mode                             Swap between the two structure modes. Reorganize files.
 --set-language      -l [c|cpp]          Set the current used language for further file creation (0=c, 1=cpp).
                     -c [ClassName]      Create class files (header and source) with basic constructor and destructor.
---set-guard         [ifndef|pragma]      Defines either it has to be #ifndef FILENAME_H or #pragma once on header
+--set-guard         [ifndef|pragma]     Defines either it has to be #ifndef FILENAME_H or #pragma once on header
                                         file creation.
+--set-name          [projectName]       Set the project executable's name.
 
 --dev                                   Compile code and run it in dev mode. It's debug mode with modified options.
 --debug             -d                  Compile code and run it in debug mode.
@@ -75,38 +81,73 @@ All added options not handled by the script will be executable's options.
                                         default one.
 
 --force             -f                  Make clean before compiling again.
---verbose           -v                  Add this option to have details of current process."
+--verbose           -v                  Add this option to have details of current process.
+--no-run                                Only builds the project.
+--static                                Build the project as static library.
+--shared                                Build the project as shared library."
 
-makefileCode="IyBNT0RJRklBQkxFCkNGTEFHUyAJCTo9IC1XZXJyb3IgLVdhbGwgLVdleHRyYQpMREZMQUdTCQk6PQpMSUJTIAkJOj0KCiMgTk9UIE1
-PRElGSUFCTEUKIyBhbGwgd2hhdCdzIGJlbG93IG11c3Qgbm90IGJlIG1vZGlmaWVkCiMgdGhlIHJ1bi5zaCBpcyBwYXNzaW5nIGFsbCB0aGUgbmVlZGVk
-IGFyZ3VtZW50cwojIHlvdSBoYXZlIHRvIGRvIHRoZSBjb25maWd1cmF0aW9uIHRocm91Z2ggdGhlIHJ1bi5zaAoKIyB0eXBlIG9mIHNvdXJjZSBmaWxlc
-wojIGMgb3IgY3BwIChtYWtlIHN1cmUgdG8gbm90IGhhdmUgc3BhY2UgYWZ0ZXIpClNSQ0VYVAkJPz0gY3BwCkhEUkVYVAkJPz0gaHBwCkNWRVJTSU9OCT
-89IDE3CkNQUFZFUlNJT04JPz0gMTcKCiMgZGV0ZWN0IGlmIGNvbXBpbGVyIGlzIGdjYyBpbnN0ZWFkIG9mIGNsYW5nLiBOb3Qgdmlld2luZyBmb3Igb3R
-oZXIgY29tcGlsZXIKIyBDCmlmZXEgKCQoU1JDRVhUKSwgYykKCWlmZXEgKCQoQ0MpLCBnY2MpCgkJQ0MgOj0gZ2NjCgllbHNlCgkJQ0MgOj0gY2xhbmcK
-CWVuZGlmICMgQyA6IGNsYW5nIG9yIGdjYwoJQ0ZMQUdTICs9IC1zdGQ9YyQoQ1ZFUlNJT04pCiMgQysrCmVsc2UKCWlmZXEgKCQoQ1hYKSwgZysrKQoJC
-UNDIDo9IGcrKwoJZWxzZQoJCUNDIDo9IGNsYW5nKysKCWVuZGlmICMgQysrIDogY2xhbmcrKyBvciBnKysKCUNGTEFHUyArPSAtc3RkPWMrKyQoQ1BQVk
-VSU0lPTikKZW5kaWYKCiMgZXhlY3V0YWJsZSBuYW1lCmlmZGVmIFBHTkFNRQoJRVhFQ1VUQUJMRSA9ICQoUEdOQU1FKQplbHNlCglFWEVDVVRBQkxFIAk
-6PSBwcm9ncmFtCmVuZGlmICMgcGduYW1lCgojIHByb2dyYW0gbmFtZSBsb2NhdGlvbgpPVVQJCQk/PSAuL2JpbgoKIyBjb21waWxhdGlvbiBtb2RlCmlm
-ZGVmIERFQlVHCglUQVJHRVRESVIgPSAkKE9VVCkvZGVidWcKZWxzZQoJVEFSR0VURElSID0gJChPVVQpL3JlbGVhc2UKZW5kaWYgIyBkZWJ1ZwoKIyBma
-W5hbCBmdWxsIGV4ZWN1dGFibGUgbG9jYXRpb24KVEFSR0VUIAkJOj0gJChUQVJHRVRESVIpLyQoRVhFQ1VUQUJMRSkKIyAubyBsb2NhdGlvbgpCVUlMRE
-RJUgk/PSAuL2J1aWxkCiMgc291cmNlIGZpbGVzIGxvY2F0aW9uClNSQ0RJUgkJPz0gLi9zcmMKIyBoZWFkZXIgZmlsZXMgbG9jYXRpb24KSU5DRElSCQk
-/PSAuL2luY2x1ZGUKClNPVVJDRVMgCTo9ICQoc2hlbGwgZmluZCAkKFNSQ0RJUikvKiogLXR5cGUgZiAtbmFtZSAqLiQoU1JDRVhUKSkKCklOQ0RJUlMJ
-CTo9CklOQ0xJU1QJCTo9CkJVSUxETElTVAk6PQpJTkMJCQk6PSAtSSQoSU5DRElSKQoKaWZkZWYgTUFDUk8KCUNGTEFHUwkJKz0gJChNQUNSTykKZW5ka
-WYKCgppZm5lcSAoLCAkKGZpcnN0d29yZCAkKHdpbGRjYXJkICQoSU5DRElSKS8qKSkpCglJTkNESVJTIAk6PSAkKHNoZWxsIGZpbmQgJChJTkNESVIpLy
-ovKiogLW5hbWUgJyouJChIRFJFWFQpJyAtZXhlYyBkaXJuYW1lIHt9IFw7IHwgc29ydCB8IHVuaXEpCglJTkNMSVNUIAk6PSAkKHBhdHN1YnN0ICQoSU5
-DRElSKS8lLCAtSSQoSU5DRElSKS8lLCAkKElOQ0RJUlMpKQoJQlVJTERMSVNUIAk6PSAkKHBhdHN1YnN0ICQoSU5DRElSKS8lLCAkKEJVSUxERElSKS8l
-LCAkKElOQ0RJUlMpKQoJSU5DIAkJKz0gJChJTkNMSVNUKQplbmRpZiAjIGluY2RpcgoKCmlmZGVmIERFQlVHCk9CSkVDVFMgCTo9ICQocGF0c3Vic3QgJ
-ChTUkNESVIpLyUsICQoQlVJTERESVIpLyUsICQoU09VUkNFUzouJChTUkNFWFQpPS5vKSkKCiQoVEFSR0VUKTogJChPQkpFQ1RTKQoJQG1rZGlyIC1wIC
-QoVEFSR0VURElSKQoJQGVjaG8gIkxpbmtpbmcuLi4iCglAZWNobyAiICBMaW5raW5nICQoVEFSR0VUKSIKCUAkKENDKSAtZyAtbyAkKFRBUkdFVCkgJF4
-gJChMSUJTKSAkKExERkxBR1MpCgokKEJVSUxERElSKS8lLm86ICQoU1JDRElSKS8lLiQoU1JDRVhUKQoJQG1rZGlyIC1wICQoQlVJTERESVIpCmlmZGVm
-IEJVSUxETElTVAoJQG1rZGlyIC1wICQoQlVJTERMSVNUKQplbmRpZgoJQGVjaG8gIkNvbXBpbGluZyAkPC4uLiI7CglAJChDQykgJChDRkxBR1MpICQoS
-U5DKSAtYyAkPCAtbyAkQAoKZWxzZSAjIFJFTEVBU0UKCiQoVEFSR0VUKToKCUBta2RpciAtcCAkKFRBUkdFVERJUikKCUBlY2hvICJMaW5raW5nLi4uIg
-oJQCQoQ0MpICQoSU5DKSAtbyAkKFRBUkdFVCkgJChTT1VSQ0VTKSAkKExJQlMpICQoTERGTEFHUykKCmVuZGlmICNkZWJ1ZyAvIHJlbGVhc2UgdGFyZ2V
-0cwoKCmNsZWFuOgoJcm0gLWYgLXIgJChCVUlMRERJUikvKioKCUBlY2hvICJBbGwgb2JqZWN0cyByZW1vdmVkIgoKY2xlYXI6IGNsZWFuCglybSAtZiAt
-ciAgJChPVVQpLyoqCglAZWNobyAiJChPVVQpIGZvbGRlciBjbGVhcmVkIgoKLlBIT05ZOiBjbGVhbiBjbGVhcg=="
+
+makefileCode="IyBNT0RJRklBQkxFCkNGTEFHUyAJCTo9IC1XZXJyb3IgLVdhbGwgLVdleHRyYQpMREZMQUdTCQk6PQpMSUJTIAkJOj0KCiMg
+Tk9UIE1PRElGSUFCTEUKIyBhbGwgd2hhdCdzIGJlbG93IG11c3Qgbm90IGJlIG1vZGlmaWVkCiMgdGhlIHJ1bi5zaCBpcyBw
+YXNzaW5nIGFsbCB0aGUgbmVlZGVkIGFyZ3VtZW50cwojIHlvdSBoYXZlIHRvIGRvIHRoZSBjb25maWd1cmF0aW9uIHRocm91
+Z2ggdGhlIHJ1bi5zaAoKIyB0eXBlIG9mIHNvdXJjZSBmaWxlcwojIGMgb3IgY3BwIChtYWtlIHN1cmUgdG8gbm90IGhhdmUg
+c3BhY2UgYWZ0ZXIpClNSQ0VYVAkJPz0gY3BwCkhEUkVYVAkJPz0gaHBwCkNWRVJTSU9OCT89IDE3CkNQUFZFUlNJT04JPz0g
+MjAKCkxJQl9TVEFUSUNfRVhUIDo9IC5hCkxJQl9TSEFSRURfRVhUIDo9IC5zbwpMSUJfU0hBUkVEX1dJTl9FWFQgOj0gLmRs
+bAoKTElCX1NUQVRJQ19DRkxBR1MgOj0gCkxJQl9TSEFSRURfQ0ZMQUdTIDo9IC1mUElDCgpMSUJfU1RBVElDX0xERkxBR1Mg
+Oj0gcgpMSUJfU0hBUkVEX0xERkxBR1MgOj0gLXNoYXJlZCAtZlBJQyAtbwoKIyBwcm9ncmFtIGxvY2F0aW9uCk9VVAkJCT89
+IC4vYmluCk9VVExJQgkJOj0gJChPVVQpL2xpYgpFWFQJCQk6PQoKClVTUl9JTkNESVIgOj0gL3Vzci9sb2NhbC9pbmNsdWRl
+ClVTUl9MSUJESVIgOj0gL3Vzci9sb2NhbC9saWIKCiMgZGV0ZWN0IGlmIGNvbXBpbGVyIGlzIGdjYyBpbnN0ZWFkIG9mIGNs
+YW5nLiBOb3Qgdmlld2luZyBmb3Igb3RoZXIgY29tcGlsZXIKIyBDCmlmZXEgKCQoU1JDRVhUKSwgYykKCWlmZXEgKCQoQ0Mp
+LCBnY2MpCgkJQ0MgOj0gZ2NjCgkJTERDQyA6PSBnY2MKCWVsc2UKCQlDQyA6PSBjbGFuZwoJCUxEQ0MgOj0gY2xhbmcKCWVu
+ZGlmICMgQyA6IGNsYW5nIG9yIGdjYwoJQ0ZMQUdTICs9IC1zdGQ9YyQoQ1ZFUlNJT04pCiMgQysrCmVsc2UKCWlmZXEgKCQo
+Q1hYKSwgZysrKQoJCUNDIDo9IGcrKwoJCUxEQ0MgOj0gZysrCgllbHNlCgkJQ0MgOj0gY2xhbmcrKwoJCUxEQ0MgOj0gY2xh
+bmcrKwoJZW5kaWYgIyBDKysgOiBjbGFuZysrIG9yIGcrKwoJQ0ZMQUdTICs9IC1zdGQ9YysrJChDUFBWRVJTSU9OKQplbmRp
+ZgoKIyBleGVjdXRhYmxlIG5hbWUKaWZkZWYgUEdOQU1FCglFWEVDVVRBQkxFIDo9ICQoUEdOQU1FKQplbHNlCglFWEVDVVRB
+QkxFIAk6PSBwcm9ncmFtCmVuZGlmICMgcGduYW1lCgojIGNvbXBpbGF0aW9uIG1vZGUKaWZkZWYgTElCClRBUkdFVERJUiA6
+PSAkKE9VVExJQikKRVhFQ1VUQUJMRSA6PSBsaWIkKEVYRUNVVEFCTEUpCgojIHNoYXJlZAoJaWZlcSAoJChMSUIpLCBTSEFS
+RUQpCgkJRVhUID0gJChMSUJfU0hBUkVEX0VYVCkKCQlDRkxBR1MgKz0gJChMSUJfU0hBUkVEX0NGTEFHUykKCQlMREZMQUdT
+ID0gJChMSUJfU0hBUkVEX0xERkxBR1MpCgoJCWlmZXEgKCQoT1MpLCBXSU5ET1dTKQoJCQlFWFQgPSAkKExJQl9TSEFSRURf
+V0lOX0VYVCkKCQllbmRpZgojIHN0YXRpYwoJZWxzZSBpZmVxICgkKExJQiksIFNUQVRJQykKCQlFWFQgPSAkKExJQl9TVEFU
+SUNfRVhUKQoJCUNGTEFHUyArPSAkKExJQl9TVEFUSUNfQ0ZMQUdTKQoJCUxERkxBR1MgPSAkKExJQl9TVEFUSUNfTERGTEFH
+UykKCQlMRENDIDo9ICQoQVIpCgllbHNlCgkJJChlcnJvciBpbmNvcnJlY3QgTElCIHZhbHVlKQoJZW5kaWYKZWxzZQojIHRh
+cmdldGRpcgoJaWZkZWYgREVCVUcKCQlUQVJHRVRESVIgPSAkKE9VVCkvZGVidWcKCQlDRkxBR1MgKz0gLWcKCQlMREZMQUdT
+ICs9IC1vCgllbHNlCgkJVEFSR0VURElSID0gJChPVVQpL3JlbGVhc2UKCWVuZGlmICMgZGVidWcKCiMgZXh0ZW5zaW9uCglp
+ZmVxICgkKE9TKSwgTUFDT1MpCgkJRVhUIDo9IC5hcHAKCWVsc2UgaWZlcSAoJChPUyksIFdJTkRPV1MpCgkJRVhUIDo9IC5l
+eGUKCWVuZGlmCmVuZGlmCgojIGZpbmFsIGZ1bGwgZXhlY3V0YWJsZSBsb2NhdGlvbgpUQVJHRVQgCQk6PSAkKFRBUkdFVERJ
+UikvJChFWEVDVVRBQkxFKSQoRVhUKQojIC5vIGxvY2F0aW9uCkJVSUxERElSCT89IC4vYnVpbGQKIyBzb3VyY2UgZmlsZXMg
+bG9jYXRpb24KU1JDRElSCQk/PSAuL3NyYwojIGhlYWRlciBmaWxlcyBsb2NhdGlvbgpJTkNESVIJCT89IC4vaW5jbHVkZQoK
+U09VUkNFUyAJOj0gJChzaGVsbCBmaW5kICQoU1JDRElSKS8qKiAtdHlwZSBmIC1uYW1lICouJChTUkNFWFQpKQoKSU5DRElS
+UwkJOj0KSU5DTElTVAkJOj0KQlVJTERMSVNUCTo9CklOQwkJCTo9IC1JJChJTkNESVIpCgppZmRlZiBNQUNSTwoJQ0ZMQUdT
+CQkrPSAkKE1BQ1JPKQplbmRpZgoKCmlmbmVxICgsICQoZmlyc3R3b3JkICQod2lsZGNhcmQgJChJTkNESVIpLyoqLyopKSkK
+CUlOQ0RJUlMgCTo9ICQoc2hlbGwgZmluZCAkKElOQ0RJUikvKi8qKiAtdHlwZSBmIC1uYW1lICcqLiQoSERSRVhUKScgLWV4
+ZWMgZGlybmFtZSB7fSBcOykKCUlOQ0xJU1QgCTo9ICQocGF0c3Vic3QgJChJTkNESVIpLyUsIC1JJChJTkNESVIpLyUsICQo
+SU5DRElSUykpCglCVUlMRExJU1QgCTo9ICQocGF0c3Vic3QgJChJTkNESVIpLyUsICQoQlVJTERESVIpLyUsICQoSU5DRElS
+UykpCglJTkMgCQkrPSAkKElOQ0xJU1QpCmVuZGlmICMgaW5jZGlyCgoKaWZkZWYgREVCVUcKT0JKRUNUUyAJOj0gJChwYXRz
+dWJzdCAkKFNSQ0RJUikvJSwgJChCVUlMRERJUikvJSwgJChTT1VSQ0VTOi4kKFNSQ0VYVCk9Lm8pKQoKYnVpbGQ6ICQoT0JK
+RUNUUykKCUBta2RpciAtcCAkKFRBUkdFVERJUikKaWZlcSAoJChWRVJCT1NFKSwgMSkKCUBlY2hvICJMaW5raW5nICQoVEFS
+R0VUKS4uLiIKZW5kaWYKCUAkKExEQ0MpICQoTERGTEFHUykgJChUQVJHRVQpICReICQoTElCUykKCiQoQlVJTERESVIpLyUu
+bzogJChTUkNESVIpLyUuJChTUkNFWFQpCglAbWtkaXIgLXAgJChCVUlMRERJUikKaWZkZWYgQlVJTERMSVNUCglAbWtkaXIg
+LXAgJChCVUlMRExJU1QpCmVuZGlmCmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiQ29tcGlsaW5nICQ8Li4uIjsKZW5k
+aWYKCUAkKENDKSAkKElOQykgJChDRkxBR1MpIC1jIC1vICRAICQ8CgplbHNlICMgUkVMRUFTRQoKYnVpbGQ6CglAbWtkaXIg
+LXAgJChUQVJHRVRESVIpCmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiTGlua2luZy4uLiIKZW5kaWYKCUAkKENDKSAk
+KElOQykgLW8gJChUQVJHRVQpICQoU09VUkNFUykgJChMSUJTKSAkKExERkxBR1MpCgplbmRpZiAjZGVidWcgLyByZWxlYXNl
+IHRhcmdldHMKCgojIHNoYXJlZApzaGFyZWQ6CmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiQnVpbGRpbmcgc2hhcmVk
+IGxpYnJhcnkuLi4iCmVuZGlmCglAJChNQUtFKSAtcyBidWlsZCBMSUI9U0hBUkVECgpzdGF0aWM6CmlmZXEgKCQoVkVSQk9T
+RSksIDEpCglAZWNobyAiQnVpbGRpbmcgc3RhdGljIGxpYnJhcnkuLi4iCmVuZGlmCglAJChNQUtFKSAtcyBidWlsZCBMSUI9
+U1RBVElDCgppbnN0YWxsOiBzaGFyZWQKCUBtdiAkKE9VVExJQikvaW5jbHVkZS8gJChVU1JfSU5DRElSKQoJQG12ICQoT1VU
+TElCKS9saWIkKEVYRUNVVEFCTEUpLnNvICQoVVNSX0xJQkRJUikKCmNsZWFuOgoJQHJtIC1mIC1yICQoQlVJTERESVIpLyoq
+CglAZWNobyAiQWxsIG9iamVjdHMgcmVtb3ZlZCIKCi5QSE9OWTogY2xlYW4gY2xlYXIgYnVpbGQgc2hhcmVkIHN0YXRpYw=="
+
+runAfterCompile=1
 
 # --------------------------------------
 
+log()
+{
+    if [ $verbose -eq 1 -a $# -gt 0 ]; then
+        echo -e $1
+    fi
+}
 
 updateMakefile()
 {
@@ -172,32 +213,32 @@ createBaseProject() {
     i=0
     if [ ! -d "$srcDir" ]; then
         mkdir $srcDir
-        [ $verbose -eq 1 -a $? -eq 0 ] && echo "Created $srcDir folder"
+        [ $? -eq 0 ] && log "Created $srcDir folder"
         ((i=i+1))
     fi
 
     if [ $projectMode -eq 0 ] && [ ! -d "$incDir" ]; then
         mkdir $incDir
-        [ $verbose -eq 1 -a $? -eq 0 ] && echo "Created $incDir folder"
+        [ $? -eq 0 ] && log "Created $incDir folder"
         ((i=i+1))
     fi
 
     if [ ! -d "$outDir" ]; then
         mkdir $outDir
-        [ $verbose -eq 1 -a $? -eq 0 ] && echo "Created $outDir folder"
+        [ $? -eq 0 ] && log "Created $outDir folder"
         ((i=i+1))
     fi
 
     if [ ! -d "$buildDir" ]; then
         mkdir $buildDir
-        [ $verbose -eq 1 -a $? -eq 0 ] && echo "Created $buildDir folder"
+        [ $? -eq 0 ] && log "Created $buildDir folder"
         ((i=i+1))
     fi
     
     if [ ! -f "$srcDir/main.$srcFileExt" ]; then
         touch "$srcDir/main.$srcFileExt"
         getMainCode > "$srcDir/main.$srcFileExt"
-        [ $verbose -eq 1 -a $? -eq 0 ] && echo "Created main file"
+        [ $? -eq 0 ] && log "Created main file"
         ((i=i+1))
     fi
 
@@ -205,11 +246,11 @@ createBaseProject() {
         touch "Makefile"
         echo -e "$makefileCode"  | base64 --decode > "Makefile"
         updateMakefile
-        [ $verbose -eq 1 -a $? -eq 0 ] && echo "Created Makefile"
+        [ $? -eq 0 ] && log "Created Makefile"
         ((i=i+1))
     fi
 
-    [ $verbose -eq 1 -a $i -eq 0 ] && echo "No changes made" || echo "Done"
+    [ $i -eq 0 ] && log "No changes made" || echo "Done"
 }
 
 getSrcCode()
@@ -391,14 +432,73 @@ swapMode()
     setMode $1
 }
 
+setProjectName()
+{
+    if [ $# -gt 0 ]; then
+        sed -i -e '0,/pgname=.*/s//pgname="'$1'"/' $0
+
+        [ $? -eq 0 ] && echo -e "\033[0;32mDone.\033[0m" || echo -e "\033[0;31mFailed.\033[0m"
+    fi
+}
+
+updateLibraryInclude()
+{
+	log "\033[0;90mUpdating shared include folder... "
+
+    baseIncludePath="$outDir/lib/include/$pgname/"
+
+    rsync -avq --delete --prune-empty-dirs --include="*/" --include="*.$hdrFileExt" --include "*.inl" --exclude="*" "$includeDir/" "$baseIncludePath"
+
+    # 1st scan :
+    # update file position
+    find "$baseIncludePath" -type f |
+    while read file; do
+        dir="$(dirname "$file")/"
+        nFile=$(ls $dir | wc -l)
+
+        while [[ $nFile -eq 1 && "$dir" != "$path" ]]; do
+            oldDir="$dir"
+            dir="${dir%*/*/}/"
+            mv "$file" "$dir"
+            rm -r "$oldDir"
+            file="${file%/*/*}/${file##*/}"
+            nFile=$(ls $dir | wc -l)
+        done
+    done
+
+    # 2nd scan :
+    # update includes path
+    find "$baseIncludePath" -type f |
+    while read file; do
+        cat "$file" | grep -Po '(?<=#include ")(.*\.('$hdrFileExt'|inl))(?=")' |
+        while read -r dep; do
+            location=$(find "$baseIncludePath" -type f -name "$dep")
+            relative=$(realpath --relative-to="$file" "$location")
+
+            search="#include \"$dep\""
+            replacement="#include \"${relative#'../'}\""
+
+            sed -i -e "s|$search|$replacement|" "$file"
+        done
+    done
+
+    log "Done."
+}
+
+# $1 = build/static/shared
+# $2 = macro
 compile()
 {
-    make ${mode^^}=1 PGNAME=$pgname\
+    [[ rule == 'build' ]] &&  macro="-D${mode^^}" || macro=""
+
+
+    make "$1" ${mode^^}=1 PGNAME=$pgname\
         SRCEXT=$srcFileExt HDREXT=$hdrFileExt\
         SRCDIR=$srcDir INCDIR=$includeDir\
         OUT=$outDir BUILDDIR=$buildDir\
         CVERSION=$cVersion CPPVERSION=$cppVersion\
-        MACRO="$1 -D${mode^^}"
+        OS="$os" MACRO="$2 $macro"\
+        VERBOSE=$verbose
 }
 
 launch()
@@ -408,92 +508,122 @@ launch()
         exit 1
     fi
 
-    j=0
     verbose=0
-	pseudoMode=$mode
+	pseudoMode="dev"
+    ext=''
+
+    j=0
+    hasMode=0
+    hasClean=0
 
     for i in 1 2 3; do
         if [ $i -le $# ]; then
-            # release / debug mode / program name
-            if [ $# -gt 0 ] && [ ${!i} == "-d" -o ${!i} == "-r" -o ${!i} == "--debug" -o ${!i} == "--release" ]; then
-				pseudoMode=$mode
-                if [[ ${!i} == "-d" || ${!i} == "--debug" || ${!i} == "--dev" ]]; then
-					mode="debug"
-					[ ${!i} == "--dev" ] && pseudoMode="dev" || pseudoMode="debug"
-				else
-					mode="release"
-				fi
+            case ${!i} in
+                "-d" | "-r" | "--debug" | "--release" | "--dev" | "--static" | "--shared")
                 ((j=j+1))
-            fi
 
-            if [ ${!i} == "-f" -o ${!i} == "--force" ]; then
-                make clean
-                ((j=j+1))
-            fi
+                if [[ hasMode -eq 0 ]]; then
+                    hasMode=1
+                    rule="build"
 
-            if [ ${!i} == "-v" -o ${!i} == "--verbose" ]; then
-                verbose=1
-                ((j=j+1))
-            fi
+                    case ${!i} in
+                        "-d" | "--debug")
+                            mode="debug"
+                            pseudoMode="debug";;
+
+                        "--dev")
+                            mode="debug"
+                            pseudoMode="dev";;
+
+                        "-r" | "--release")
+                            mode="release";;
+
+                        "--static")
+                            mode="debug"
+                            rule="static"
+                            runAfterCompile=0;;
+
+                        "--shared")
+                            mode="debug"
+                            rule="shared"
+                            runAfterCompile=0;;
+                    esac
+                fi;;
+
+                "-f" | "--force")
+                    ((j=j+1))
+
+                    if [[ hasClean -eq 0 ]]; then
+                        hasClean=1
+                    fi;;
+
+                "-v" | "--verbose")
+                    ((j=j+1))
+                    verbose=1;;
+            esac
         fi
     done
-
-	[ $mode == "dev" ] && mode="debug"
 
     while ((j > 0)); do
         shift
         ((j=j-1))
     done
 
-    ext=''
-    os='LINUX'
-
-    # detect os and adapt executable's extension
-    if [ "$OSTYPE" == "darwin"* ]; then # mac OS
-        ext='.app'
-        os='MACOS'
-    elif [ "$OSTYPE" == "cygwin" -o "$OSTYPE" == "msys" -o "$OSTYPE" == "win32" ]; then # windows
-        ext='.exe'
-        os='WINDOWS'
+    if [[ hasClean -eq 1 ]]; then
+        [[ $verbose -eq 0 ]] && make clean 1>/dev/null || make clean
     fi
 
-    pgname=$"$pgname$ext"
+    case "$OSTYPE" in
+        "linux"*)
+            ext=""
+            os="LINUX";;
+        "darwin"*)
+            ext=".app"
+            os="MACOS";;
+        "cygwin" | "msys" | "win32")
+            ext=".exe"
+            os="WINDOWS";;
+    esac
 
-    macro="-D$os"
+    if [ ! -z "$os" ]; then
+        macro="-D$os"
+    fi
 
     # get header files folder
-    [[ $projectMode -eq 1 ]] && includeDir=$srcDir || includeDir=$incDir
+    [ $projectMode -eq 1 ] && includeDir=$srcDir || includeDir=$incDir
 
-    if [ $verbose -eq 1 ]; then
-        echo -e "Compiling..."
-    fi
+    log "Compiling..."
 
 	echo -e -n "\033[0;90m"
 
     # compile and execute if succeed
-    [ $verbose -eq 1 ] && compile "$macro" || compile "$macro" 2> /dev/null
+    [ $verbose -eq 1 ] && compile "$rule" "$macro" || compile "$rule" "$macro" 2> /dev/null
 
     res=$?
 
-	echo -e "\033[0m"
+	echo -e -n "\033[0m"
 
     if [ $res -eq 0 ]; then
-        cd "$outDir/"
+        log "\n\033[0;32mCompilation succeed\033[0m\n"
+        
+        if [ "$rule" == "shared" ]; then
+            updateLibraryInclude
+        elif [ $runAfterCompile -eq 1 ]; then
+            log "----- Executing ${mode^^} mode -----\n\n"
 
-        if [ $verbose -eq 1 ]; then
-            echo -e "\n\033[0;32mCompilation succeed\033[0m\n"
-            echo -e "----- Executing ${mode^^} mode -----\n\n"
-        fi
-        if [ $pseudoMode == "debug" ]; then
-            gdb ./$mode/$pgname $@
-        else
-            ./$mode/$pgname $@
+            cd "$outDir/"
+
+            if [ $pseudoMode == "debug" ]; then
+                gdb ./$mode/$pgname$ext $@
+            else
+                ./$mode/$pgname$ext $@
+            fi
         fi
     else
         echo -e "\n\033[0;31mCompilation failed\033[0m\n"
     fi
 
-    echo -e "\033[0m"
+    echo -e -n "\033[0m"
 }
 
 
@@ -504,7 +634,7 @@ patch()
     version=${version:-0.1}
 
     if [ $r -eq 0 ]; then
-        newVersion="$(echo $(grep version=[0-9]\.[0-9] $0) | sed -r 's/version=//')"
+        newVersion="$(echo $(grep version=[0-9]\.[0-9] $0) | sed -E 's/version=//')"
         
         if [ $version == $newVersion ]; then
             echo "Already on latest version ($version)."
@@ -546,6 +676,9 @@ if [ $# -gt 0 ]; then
             [ $# -gt 1 ] && [ $2 == "-v" -o $2 == "--verbose" ]  && verbose=1 || verbose=0
             swapMode $((1 - $projectMode)) $verbose;;
 
+        "--set-name")
+            [ $# -gt 1 ] && setProjectName $2;;
+
         "-l" | "--set-language")
             setLang $2;;
 
@@ -554,6 +687,16 @@ if [ $# -gt 0 ]; then
 
         "-c")
             [ $# -gt 1 ] && createClass $2 || echo "Error : no class name provided.";;
+
+        "--no-run")
+            runAfterCompile=0
+            launch $@;;
+
+        "--static")
+            compile "static";;
+
+        "--shared")
+            compile "shared";;
 
         # compile and run project
         *)
