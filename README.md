@@ -60,6 +60,16 @@ run.sh
 
 The makefile will compile every source it will find on the `src/` folder.
 It is also adding every sub-folders of `include/` (or `src/` if prject's mode = 1) folder so when you're doing an include, you just have to write the filename (with .h at the end) without its path.
+
+Example :
+```cpp
+#include "../../utils/something.hpp" // useless !
+```
+Use this instead :
+```cpp
+#include "something.hpp"
+```
+
 So you don't have to be worried about the Makefile, just code and `./run.sh` !
 
 Tip : you can add `./run.sh` as an alias or symlink so you just have to write `run` instead.
@@ -74,3 +84,4 @@ You can use the script to build static and/or shared libraries :
 This will create the object files in the build folder, then create the `.a`, `.so` or `.dll` (on Windows) in the `bin/lib/` folder.<br>
 Plus, it will copy/paste all the header files you have (`.h`, `.hpp` and `.inl`) in `bin/lib/include/{Project_Name}/`, reorganizing these as follow :
 - All files header files that are alone in their folder will be up to their parent, recusivly. This avoids a ton of subfolders just for a file.
+- All `#include "my_project_file"` pathes will be transformed so it will search with a relative path. You can then use it everywhere without worrying about the configuration.
