@@ -27,7 +27,7 @@ The script applies the right executable's extension depending on which OS you ar
 | build/ # follows the sub-folders structure you made in your src/ folder.
     | # all object files (.o) are stored here
 | include/
-    | # every header files are stored here (.h)
+    | # every header files are stored here (.h/.hpp/.inl)
 | src/
     | # every source files are stored here (.c, .cpp)
     | main.cpp
@@ -46,7 +46,7 @@ run.sh
 | build/ # follows the sub-folders structure you made in your src/ folder.
     | # all object files (.o) are stored here
 | src/
-    | # every source and header files are stored here (.c, .cpp, .h)
+    | # every source and header files are stored here (.c, .cpp, .h, .hpp, .inl)
     | Engine/
         | Engine.cpp
         | Engine.h
@@ -63,3 +63,14 @@ It is also adding every sub-folders of `include/` (or `src/` if prject's mode = 
 So you don't have to be worried about the Makefile, just code and `./run.sh` !
 
 Tip : you can add `./run.sh` as an alias or symlink so you just have to write `run` instead.
+
+
+## Script for libraries
+
+You can use the script to build static and/or shared libraries :
+
+`./run.sh --static` or `./run.sh --shared`.
+
+This will create the object files in the build folder, then create the `.a`, `.so` or `.dll` (on Windows) in the `bin/lib/` folder.<br>
+Plus, it will copy/paste all the header files you have (`.h`, `.hpp` and `.inl`) in `bin/lib/include/{Project_Name}/`, reorganizing these as follow :
+- All files header files that are alone in their folder will be up to their parent, recusivly. This avoids a ton of subfolders just for a file.
