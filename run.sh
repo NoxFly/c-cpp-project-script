@@ -7,6 +7,9 @@
 # --------------------------------------
 # YOU CAN CHANGE THESE CONFIG VARIABLES
 
+# project folder's name is the default application's name
+pgname=${PWD##*/}
+
 # adapt these pathes for your project
 # don't forget to do execute 'updateMakefile' after any modification.
 # If you don't do it, it's not dangerous, because the script will always
@@ -25,7 +28,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.0.7
+version=0.0.8
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -40,8 +43,6 @@ projectMode=0
 mode="debug"
 # makefile rule, depending on the mode
 rule="build"
-# project folder's name is the default application's name
-pgname="NoxEngine"
 
 ext=""
 os="linux"
