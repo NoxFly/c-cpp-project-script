@@ -19,7 +19,7 @@ srcDir="./src"
 incDir="./include" # availible only on projectMode = 0
 outDir="./bin"
 buildDir="./build"
-cppVersion=20 # 98, 03, 11, 17, 20, 23
+cppVersion=17 # 98, 03, 11, 17, 20, 23
 cVersion=17 # 89, 99, 11, 17
 # --------------------------------------
 
@@ -28,7 +28,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.0.8
+version=0.0.9
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -85,59 +85,57 @@ All added options not handled by the script will be executable's options.
 --verbose           -v                  Add this option to have details of current process.
 --no-run                                Only builds the project.
 --static                                Build the project as static library.
---shared                                Build the project as shared library."
+--shared                                Build the project as shared library.
+
+Note : the libs/ folder is only for Window's libraries. On Linux it will find on the \$path.
+Also, you can need to put .dll on the $binDir folder.
+The script will adapt depending on which OS you're building and running the project.
+It means that you can develop, build and run on Linux and Windows the same project."
 
 
-makefileCode="IyBNT0RJRklBQkxFCkNGTEFHUyAJCTo9IC1XZXJyb3IgLVdhbGwgLVdleHRyYQpMREZMQUdTCQk6PQpMSUJTIAkJOj0KCiMg
-Tk9UIE1PRElGSUFCTEUKIyBhbGwgd2hhdCdzIGJlbG93IG11c3Qgbm90IGJlIG1vZGlmaWVkCiMgdGhlIHJ1bi5zaCBpcyBw
-YXNzaW5nIGFsbCB0aGUgbmVlZGVkIGFyZ3VtZW50cwojIHlvdSBoYXZlIHRvIGRvIHRoZSBjb25maWd1cmF0aW9uIHRocm91
-Z2ggdGhlIHJ1bi5zaAoKIyB0eXBlIG9mIHNvdXJjZSBmaWxlcwojIGMgb3IgY3BwIChtYWtlIHN1cmUgdG8gbm90IGhhdmUg
-c3BhY2UgYWZ0ZXIpClNSQ0VYVAkJPz0gY3BwCkhEUkVYVAkJPz0gaHBwCkNWRVJTSU9OCT89IDE3CkNQUFZFUlNJT04JPz0g
-MjAKCkxJQl9TVEFUSUNfRVhUIDo9IC5hCkxJQl9TSEFSRURfRVhUIDo9IC5zbwpMSUJfU0hBUkVEX1dJTl9FWFQgOj0gLmRs
-bAoKTElCX1NUQVRJQ19DRkxBR1MgOj0gCkxJQl9TSEFSRURfQ0ZMQUdTIDo9IC1mUElDCgpMSUJfU1RBVElDX0xERkxBR1Mg
-Oj0gcgpMSUJfU0hBUkVEX0xERkxBR1MgOj0gLXNoYXJlZCAtZlBJQyAtbwoKIyBwcm9ncmFtIGxvY2F0aW9uCk9VVAkJCT89
-IC4vYmluCk9VVExJQgkJOj0gJChPVVQpL2xpYgpFWFQJCQk6PQoKClVTUl9JTkNESVIgOj0gL3Vzci9sb2NhbC9pbmNsdWRl
-ClVTUl9MSUJESVIgOj0gL3Vzci9sb2NhbC9saWIKCiMgZGV0ZWN0IGlmIGNvbXBpbGVyIGlzIGdjYyBpbnN0ZWFkIG9mIGNs
-YW5nLiBOb3Qgdmlld2luZyBmb3Igb3RoZXIgY29tcGlsZXIKIyBDCmlmZXEgKCQoU1JDRVhUKSwgYykKCWlmZXEgKCQoQ0Mp
-LCBnY2MpCgkJQ0MgOj0gZ2NjCgkJTERDQyA6PSBnY2MKCWVsc2UKCQlDQyA6PSBjbGFuZwoJCUxEQ0MgOj0gY2xhbmcKCWVu
-ZGlmICMgQyA6IGNsYW5nIG9yIGdjYwoJQ0ZMQUdTICs9IC1zdGQ9YyQoQ1ZFUlNJT04pCiMgQysrCmVsc2UKCWlmZXEgKCQo
-Q1hYKSwgZysrKQoJCUNDIDo9IGcrKwoJCUxEQ0MgOj0gZysrCgllbHNlCgkJQ0MgOj0gY2xhbmcrKwoJCUxEQ0MgOj0gY2xh
-bmcrKwoJZW5kaWYgIyBDKysgOiBjbGFuZysrIG9yIGcrKwoJQ0ZMQUdTICs9IC1zdGQ9YysrJChDUFBWRVJTSU9OKQplbmRp
-ZgoKIyBleGVjdXRhYmxlIG5hbWUKaWZkZWYgUEdOQU1FCglFWEVDVVRBQkxFIDo9ICQoUEdOQU1FKQplbHNlCglFWEVDVVRB
-QkxFIAk6PSBwcm9ncmFtCmVuZGlmICMgcGduYW1lCgojIGNvbXBpbGF0aW9uIG1vZGUKaWZkZWYgTElCClRBUkdFVERJUiA6
-PSAkKE9VVExJQikKRVhFQ1VUQUJMRSA6PSBsaWIkKEVYRUNVVEFCTEUpCgojIHNoYXJlZAoJaWZlcSAoJChMSUIpLCBTSEFS
-RUQpCgkJRVhUID0gJChMSUJfU0hBUkVEX0VYVCkKCQlDRkxBR1MgKz0gJChMSUJfU0hBUkVEX0NGTEFHUykKCQlMREZMQUdT
-ID0gJChMSUJfU0hBUkVEX0xERkxBR1MpCgoJCWlmZXEgKCQoT1MpLCBXSU5ET1dTKQoJCQlFWFQgPSAkKExJQl9TSEFSRURf
-V0lOX0VYVCkKCQllbmRpZgojIHN0YXRpYwoJZWxzZSBpZmVxICgkKExJQiksIFNUQVRJQykKCQlFWFQgPSAkKExJQl9TVEFU
-SUNfRVhUKQoJCUNGTEFHUyArPSAkKExJQl9TVEFUSUNfQ0ZMQUdTKQoJCUxERkxBR1MgPSAkKExJQl9TVEFUSUNfTERGTEFH
-UykKCQlMRENDIDo9ICQoQVIpCgllbHNlCgkJJChlcnJvciBpbmNvcnJlY3QgTElCIHZhbHVlKQoJZW5kaWYKZWxzZQojIHRh
-cmdldGRpcgoJaWZkZWYgREVCVUcKCQlUQVJHRVRESVIgPSAkKE9VVCkvZGVidWcKCQlDRkxBR1MgKz0gLWcKCQlMREZMQUdT
-ICs9IC1vCgllbHNlCgkJVEFSR0VURElSID0gJChPVVQpL3JlbGVhc2UKCWVuZGlmICMgZGVidWcKCiMgZXh0ZW5zaW9uCglp
-ZmVxICgkKE9TKSwgTUFDT1MpCgkJRVhUIDo9IC5hcHAKCWVsc2UgaWZlcSAoJChPUyksIFdJTkRPV1MpCgkJRVhUIDo9IC5l
-eGUKCWVuZGlmCmVuZGlmCgojIGZpbmFsIGZ1bGwgZXhlY3V0YWJsZSBsb2NhdGlvbgpUQVJHRVQgCQk6PSAkKFRBUkdFVERJ
-UikvJChFWEVDVVRBQkxFKSQoRVhUKQojIC5vIGxvY2F0aW9uCkJVSUxERElSCT89IC4vYnVpbGQKIyBzb3VyY2UgZmlsZXMg
-bG9jYXRpb24KU1JDRElSCQk/PSAuL3NyYwojIGhlYWRlciBmaWxlcyBsb2NhdGlvbgpJTkNESVIJCT89IC4vaW5jbHVkZQoK
-U09VUkNFUyAJOj0gJChzaGVsbCBmaW5kICQoU1JDRElSKS8qKiAtdHlwZSBmIC1uYW1lICouJChTUkNFWFQpKQoKSU5DRElS
-UwkJOj0KSU5DTElTVAkJOj0KQlVJTERMSVNUCTo9CklOQwkJCTo9IC1JJChJTkNESVIpCgppZmRlZiBNQUNSTwoJQ0ZMQUdT
-CQkrPSAkKE1BQ1JPKQplbmRpZgoKCmlmbmVxICgsICQoZmlyc3R3b3JkICQod2lsZGNhcmQgJChJTkNESVIpLyoqLyopKSkK
-CUlOQ0RJUlMgCTo9ICQoc2hlbGwgZmluZCAkKElOQ0RJUikvKi8qKiAtdHlwZSBmIC1uYW1lICcqLiQoSERSRVhUKScgLWV4
-ZWMgZGlybmFtZSB7fSBcOykKCUlOQ0xJU1QgCTo9ICQocGF0c3Vic3QgJChJTkNESVIpLyUsIC1JJChJTkNESVIpLyUsICQo
-SU5DRElSUykpCglCVUlMRExJU1QgCTo9ICQocGF0c3Vic3QgJChJTkNESVIpLyUsICQoQlVJTERESVIpLyUsICQoSU5DRElS
-UykpCglJTkMgCQkrPSAkKElOQ0xJU1QpCmVuZGlmICMgaW5jZGlyCgoKaWZkZWYgREVCVUcKT0JKRUNUUyAJOj0gJChwYXRz
-dWJzdCAkKFNSQ0RJUikvJSwgJChCVUlMRERJUikvJSwgJChTT1VSQ0VTOi4kKFNSQ0VYVCk9Lm8pKQoKYnVpbGQ6ICQoT0JK
-RUNUUykKCUBta2RpciAtcCAkKFRBUkdFVERJUikKaWZlcSAoJChWRVJCT1NFKSwgMSkKCUBlY2hvICJMaW5raW5nICQoVEFS
-R0VUKS4uLiIKZW5kaWYKCUAkKExEQ0MpICQoTERGTEFHUykgJChUQVJHRVQpICReICQoTElCUykKCiQoQlVJTERESVIpLyUu
-bzogJChTUkNESVIpLyUuJChTUkNFWFQpCglAbWtkaXIgLXAgJChCVUlMRERJUikKaWZkZWYgQlVJTERMSVNUCglAbWtkaXIg
-LXAgJChCVUlMRExJU1QpCmVuZGlmCmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiQ29tcGlsaW5nICQ8Li4uIjsKZW5k
-aWYKCUAkKENDKSAkKElOQykgJChDRkxBR1MpIC1jIC1vICRAICQ8CgplbHNlICMgUkVMRUFTRQoKYnVpbGQ6CglAbWtkaXIg
-LXAgJChUQVJHRVRESVIpCmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiTGlua2luZy4uLiIKZW5kaWYKCUAkKENDKSAk
-KElOQykgLW8gJChUQVJHRVQpICQoU09VUkNFUykgJChMSUJTKSAkKExERkxBR1MpCgplbmRpZiAjZGVidWcgLyByZWxlYXNl
-IHRhcmdldHMKCgojIHNoYXJlZApzaGFyZWQ6CmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiQnVpbGRpbmcgc2hhcmVk
-IGxpYnJhcnkuLi4iCmVuZGlmCglAJChNQUtFKSAtcyBidWlsZCBMSUI9U0hBUkVECgpzdGF0aWM6CmlmZXEgKCQoVkVSQk9T
-RSksIDEpCglAZWNobyAiQnVpbGRpbmcgc3RhdGljIGxpYnJhcnkuLi4iCmVuZGlmCglAJChNQUtFKSAtcyBidWlsZCBMSUI9
-U1RBVElDCgppbnN0YWxsOiBzaGFyZWQKCUBtdiAkKE9VVExJQikvaW5jbHVkZS8gJChVU1JfSU5DRElSKQoJQG12ICQoT1VU
-TElCKS9saWIkKEVYRUNVVEFCTEUpLnNvICQoVVNSX0xJQkRJUikKCmNsZWFuOgoJQHJtIC1mIC1yICQoQlVJTERESVIpLyoq
-CglAZWNobyAiQWxsIG9iamVjdHMgcmVtb3ZlZCIKCi5QSE9OWTogY2xlYW4gY2xlYXIgYnVpbGQgc2hhcmVkIHN0YXRpYw=="
+makefileCode="IyBNT0RJRklBQkxFCkNGTEFHUyAJCTo9IC1XZXJyb3IgLVdhbGwgLVdleHRyYQpMREZMQUdTCQk6PQpMSUJTIAkJOj0gCgojIE5PVCBN
+T0RJRklBQkxFCiMgYWxsIHdoYXQncyBiZWxvdyBtdXN0IG5vdCBiZSBtb2RpZmllZAojIHRoZSBydW4uc2ggaXMgcGFzc2luZyBhbGwgdGhlIG5lZWRlZC
+Bhcmd1bWVudHMKIyB5b3UgaGF2ZSB0byBkbyB0aGUgY29uZmlndXJhdGlvbiB0aHJvdWdoIHRoZSBydW4uc2gKCiMgdHlwZSBvZiBzb3VyY2UgZmlsZXMK
+IyBjIG9yIGNwcCAobWFrZSBzdXJlIHRvIG5vdCBoYXZlIHNwYWNlIGFmdGVyKQpTUkNFWFQJCT89IGNwcApIRFJFWFQJCT89IGhwcApDVkVSU0lPTgk/PS
+AxNwpDUFBWRVJTSU9OCT89IDE3CgpMSUJfU1RBVElDX0VYVCA6PSAuYQpMSUJfU0hBUkVEX0VYVCA6PSAuc28KTElCX1NIQVJFRF9XSU5fRVhUIDo9IC5k
+bGwKCkxJQl9TVEFUSUNfQ0ZMQUdTIDo9IApMSUJfU0hBUkVEX0NGTEFHUyA6PSAtZlBJQwoKTElCX1NUQVRJQ19MREZMQUdTIDo9IHIKTElCX1NIQVJFRF
+9MREZMQUdTIDo9IC1zaGFyZWQgLWZQSUMgLW8KCiMgcHJvZ3JhbSBsb2NhdGlvbgpPVVQJCQk/PSAuL2JpbgpPVVRMSUIJCTo9ICQoT1VUKS9saWIKRVhU
+CQkJOj0KCgpVU1JfSU5DRElSIDo9IC91c3IvbG9jYWwvaW5jbHVkZQpVU1JfTElCRElSIDo9IC91c3IvbG9jYWwvbGliCgojIGRldGVjdCBpZiBjb21waW
+xlciBpcyBnY2MgaW5zdGVhZCBvZiBjbGFuZy4gTm90IHZpZXdpbmcgZm9yIG90aGVyIGNvbXBpbGVyCiMgQwppZmVxICgkKFNSQ0VYVCksIGMpCglpZmVx
+ICgkKENDKSwgZ2NjKQoJCUNDIDo9IGdjYwoJCUxEQ0MgOj0gZ2NjCgllbHNlCgkJQ0MgOj0gY2xhbmcKCQlMRENDIDo9IGNsYW5nCgllbmRpZiAjIEMgOi
+BjbGFuZyBvciBnY2MKCUNGTEFHUyArPSAtc3RkPWMkKENWRVJTSU9OKQojIEMrKwplbHNlCglpZmVxICgkKENYWCksIGcrKykKCQlDQyA6PSBnKysKCQlM
+RENDIDo9IGcrKwoJZWxzZQoJCUNDIDo9IGNsYW5nKysKCQlMRENDIDo9IGNsYW5nKysKCWVuZGlmICMgQysrIDogY2xhbmcrKyBvciBnKysKCUNGTEFHUy
+ArPSAtc3RkPWMrKyQoQ1BQVkVSU0lPTikKZW5kaWYKCiMgZXhlY3V0YWJsZSBuYW1lCmlmZGVmIFBHTkFNRQoJRVhFQ1VUQUJMRSA6PSAkKFBHTkFNRSkK
+ZWxzZQoJRVhFQ1VUQUJMRSAJOj0gcHJvZ3JhbQplbmRpZiAjIHBnbmFtZQoKIyBjb21waWxhdGlvbiBtb2RlCmlmZGVmIExJQgpUQVJHRVRESVIgOj0gJC
+hPVVRMSUIpCkVYRUNVVEFCTEUgOj0gbGliJChFWEVDVVRBQkxFKQoKIyBzaGFyZWQKCWlmZXEgKCQoTElCKSwgU0hBUkVEKQoJCUVYVCA9ICQoTElCX1NI
+QVJFRF9FWFQpCgkJQ0ZMQUdTICs9ICQoTElCX1NIQVJFRF9DRkxBR1MpCgkJTERGTEFHUyA9ICQoTElCX1NIQVJFRF9MREZMQUdTKQoKCQlpZmVxICgkKE
+9TKSwgV0lORE9XUykKCQkJRVhUID0gJChMSUJfU0hBUkVEX1dJTl9FWFQpCgkJZW5kaWYKIyBzdGF0aWMKCWVsc2UgaWZlcSAoJChMSUIpLCBTVEFUSUMp
+CgkJRVhUID0gJChMSUJfU1RBVElDX0VYVCkKCQlDRkxBR1MgKz0gJChMSUJfU1RBVElDX0NGTEFHUykKCQlMREZMQUdTID0gJChMSUJfU1RBVElDX0xERk
+xBR1MpCgkJTERDQyA6PSAkKEFSKQoJZWxzZQoJCSQoZXJyb3IgaW5jb3JyZWN0IExJQiB2YWx1ZSkKCWVuZGlmCmVsc2UKIyB0YXJnZXRkaXIKCWlmZGVm
+IERFQlVHCgkJVEFSR0VURElSID0gJChPVVQpL2RlYnVnCgkJQ0ZMQUdTICs9IC1nCgkJTERGTEFHUyArPSAtbwoJZWxzZQoJCVRBUkdFVERJUiA9ICQoT1
+VUKS9yZWxlYXNlCgllbmRpZiAjIGRlYnVnCgojIGV4dGVuc2lvbgoJaWZlcSAoJChPUyksIE1BQ09TKQoJCUVYVCA6PSAuYXBwCgllbHNlIGlmZXEgKCQo
+T1MpLCBXSU5ET1dTKQoJCUVYVCA6PSAuZXhlCgllbmRpZgplbmRpZgoKIyBmaW5hbCBmdWxsIGV4ZWN1dGFibGUgbG9jYXRpb24KVEFSR0VUIAkJOj0gJC
+hUQVJHRVRESVIpLyQoRVhFQ1VUQUJMRSkkKEVYVCkKIyAubyBsb2NhdGlvbgpCVUlMRERJUgk/PSAuL2J1aWxkCiMgc291cmNlIGZpbGVzIGxvY2F0aW9u
+ClNSQ0RJUgkJPz0gLi9zcmMKIyBoZWFkZXIgZmlsZXMgbG9jYXRpb24KSU5DRElSCQk/PSAuL2luY2x1ZGUKClNPVVJDRVMgCTo9ICQoc2hlbGwgZmluZC
+AkKFNSQ0RJUikvKiogLXR5cGUgZiAtbmFtZSAqLiQoU1JDRVhUKSkKCklOQ0RJUlMJCTo9CklOQ0xJU1QJCTo9CkJVSUxETElTVAk6PQpJTkMJCQk6PSAt
+SSQoSU5DRElSKQoKaWZkZWYgTUFDUk8KCUNGTEFHUwkJKz0gJChNQUNSTykKZW5kaWYKCgppZm5lcSAoLCAkKGZpcnN0d29yZCAkKHdpbGRjYXJkICQoSU
+5DRElSKS8qKi8qKSkpCglJTkNESVJTIAk6PSAkKHNoZWxsIGZpbmQgJChJTkNESVIpLyovKiogLXR5cGUgZiAtbmFtZSAnKi4kKEhEUkVYVCknIC1leGVj
+IGRpcm5hbWUge30gXDspCglJTkNMSVNUIAk6PSAkKHBhdHN1YnN0ICQoSU5DRElSKS8lLCAtSSQoSU5DRElSKS8lLCAkKElOQ0RJUlMpKQoJQlVJTERMSV
+NUIAk6PSAkKHBhdHN1YnN0ICQoSU5DRElSKS8lLCAkKEJVSUxERElSKS8lLCAkKElOQ0RJUlMpKQoJSU5DIAkJKz0gJChJTkNMSVNUKQplbmRpZiAjIGlu
+Y2RpcgoKIyBwcm9qZWN0IHNwZWNpZmljCiMgd2luZG93cyBsaWJzIGluY2x1ZGUKaWZlcSAoJChPUyksIFdJTkRPV1MpCglJTkMgKz0gLUkuL2xpYnMvaW
+5jbHVkZQoJTERGTEFHUyA6PSAtTC4vbGlicy9saWIgJChMREZMQUdTKQplbmRpZgoKCkxJQlMgOj0gJChwYXRzdWJzdCAlLCAtbCUsICQoTElCUykpCgoK
+CmlmZGVmIERFQlVHCk9CSkVDVFMgCTo9ICQocGF0c3Vic3QgJChTUkNESVIpLyUsICQoQlVJTERESVIpLyUsICQoU09VUkNFUzouJChTUkNFWFQpPS5vKS
+kKCmJ1aWxkOiAkKE9CSkVDVFMpCglAbWtkaXIgLXAgJChUQVJHRVRESVIpCmlmZXEgKCQoVkVSQk9TRSksIDEpCglAZWNobyAiTGlua2luZyAkKFRBUkdF
+VCkuLi4iCmVuZGlmCglAJChMRENDKSAkKExERkxBR1MpICQoVEFSR0VUKSAkXiAkKExJQlMpCgokKEJVSUxERElSKS8lLm86ICQoU1JDRElSKS8lLiQoU1
+JDRVhUKQoJQG1rZGlyIC1wICQoQlVJTERESVIpCmlmZGVmIEJVSUxETElTVAoJQG1rZGlyIC1wICQoQlVJTERMSVNUKQplbmRpZgppZmVxICgkKFZFUkJP
+U0UpLCAxKQoJQGVjaG8gIkNvbXBpbGluZyAkPC4uLiI7CmVuZGlmCglAJChDQykgJChJTkMpICQoQ0ZMQUdTKSAtYyAtbyAkQCAkPAoKZWxzZSAjIFJFTE
+VBU0UKCmJ1aWxkOgoJQG1rZGlyIC1wICQoVEFSR0VURElSKQppZmVxICgkKFZFUkJPU0UpLCAxKQoJQGVjaG8gIkxpbmtpbmcuLi4iCmVuZGlmCglAJChD
+QykgJChJTkMpIC1vICQoVEFSR0VUKSAkKFNPVVJDRVMpICQoTElCUykgJChMREZMQUdTKQoKZW5kaWYgI2RlYnVnIC8gcmVsZWFzZSB0YXJnZXRzCgoKIy
+BzaGFyZWQKc2hhcmVkOgppZmVxICgkKFZFUkJPU0UpLCAxKQoJQGVjaG8gIkJ1aWxkaW5nIHNoYXJlZCBsaWJyYXJ5Li4uIgplbmRpZgoJQCQoTUFLRSkg
+LXMgYnVpbGQgTElCPVNIQVJFRAoKc3RhdGljOgppZmVxICgkKFZFUkJPU0UpLCAxKQoJQGVjaG8gIkJ1aWxkaW5nIHN0YXRpYyBsaWJyYXJ5Li4uIgplbm
+RpZgoJQCQoTUFLRSkgLXMgYnVpbGQgTElCPVNUQVRJQwoKaW5zdGFsbDogc2hhcmVkCglAbXYgJChPVVRMSUIpL2luY2x1ZGUvICQoVVNSX0lOQ0RJUikK
+CUBtdiAkKE9VVExJQikvbGliJChFWEVDVVRBQkxFKS5zbyAkKFVTUl9MSUJESVIpCgpjbGVhbjoKCUBybSAtZiAtciAkKEJVSUxERElSKS8qKgoJQGVjaG
+8gIkFsbCBvYmplY3RzIHJlbW92ZWQiCgouUEhPTlk6IGNsZWFuIGNsZWFyIGJ1aWxkIHNoYXJlZCBzdGF0aWM="
 
 runAfterCompile=1
 
@@ -176,24 +174,38 @@ getHelp()
 
 createClass()
 {
-    if [[ ! $1 =~ ^[a-zA-Z_][a-zA-Z0-9_]+$ ]]; then
+    if [[ ! $1 =~ ^([a-zA-Z0-9_\-]+/)*[a-zA-Z_][a-zA-Z0-9_]+$ ]]; then
         echo "Error : class name must only contains alphanumeric characters and underscores"
     else
         echo "Creating class $1..."
+        
         if [ ! -d $srcDir ]; then
             echo -e "Project's structure not created yet.\nAborting."
             getHelp
             exit 2
         fi
 
-        if [ $projectMode -eq 0 ]; then
-            srcPath="$srcDir/$1.$srcFileExt"
-            incPath="$incDir/$1.$hdrFileExt"
+        className=${1##*/}
+        path=${1%/*}
+
+        if [ "$className" == "$path" ]; then
+            path=''
         else
-            folderPath="$srcDir/$1"
+            path="$path/"
+        fi
+
+        if [ $projectMode -eq 0 ]; then
+            mkdir -p "$srcDir/$path"
+            mkdir -p "$incDir/$path"
+
+            srcPath="$srcDir/$path$className.$srcFileExt"
+            incPath="$incDir/$path$className.$hdrFileExt"
+        else
+            folderPath="$srcDir/$path$className"
             mkdir -p $folderPath
-            srcPath="$folderPath/$1.$srcFileExt"
-            incPath="$folderPath/$1.$hdrFileExt"
+
+            srcPath="$folderPath/$className.$srcFileExt"
+            incPath="$folderPath/$className.$hdrFileExt"
         fi
 
         if [ -f "$srcPath" ] || [ -f "$incPath" ]; then
@@ -202,8 +214,8 @@ createClass()
         else
             touch $srcPath
             touch $incPath
-            getSrcCode $1 > $srcPath
-            getHeaderCode $1 > $incPath
+            getSrcCode $className > $srcPath
+            getHeaderCode $className > $incPath
             echo "Done"
         fi
     fi
@@ -233,6 +245,12 @@ createBaseProject() {
     if [ ! -d "$buildDir" ]; then
         mkdir $buildDir
         [ $? -eq 0 ] && log "Created $buildDir folder"
+        ((i=i+1))
+    fi
+
+    if [ ! -d "libs/" ]; then
+        mkdir './libs'
+        [ $? -eq 0 ] && log "Created ./libs folder"
         ((i=i+1))
     fi
     
@@ -286,9 +304,9 @@ getHeaderCode()
 
 getMainCode() {
     if [ $srcFileExt == "cpp" ]; then
-        echo -e -n "#include <iostream>\n\nint main(int argc, char **argv) {\n\tstd::cout << \"Hello World\" << std::endl;\n\treturn 0;\n}"
+        echo -e -n "#include <iostream>\n\nint main(int argc, char **argv) {\n\t(void)argc;\n\t(void)argv;\n\tstd::cout << \"Hello World\" << std::endl;\n\treturn EXIT_SUCCESS;\n}"
     elif [ $srcFileExt == "c" ]; then
-        echo -e -n "#include <stdio.h>\n\nint main(int argc, char **argv) {\n\tprintf(\"Hello World \");\n\treturn 0;\n}"
+        echo -e -n "#include <stdio.h>\n\nint main(int argc, char **argv) {\n\t(void)argc;\n\t(void)argv;\n\tprintf(\"Hello World \");\n\treturn 0;\n}"
     fi
 }
 
