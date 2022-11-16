@@ -28,7 +28,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.0.9
+version=0.1.0
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
