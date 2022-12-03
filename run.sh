@@ -28,7 +28,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.1.0
+version=0.1.1
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -712,14 +712,8 @@ if [ $# -gt 0 ]; then
             runAfterCompile=0
             launch $@;;
 
-        "--static")
-            compile "static";;
-
-        "--shared")
-            compile "shared";;
-
-        # compile and run project
-        *)
+	# compile [and run project if not built as lib]
+        "--static" | "--shared" | *)
             launch $@;;
     esac
 else
