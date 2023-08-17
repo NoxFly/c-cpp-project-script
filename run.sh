@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Author : NoxFly
-# Copyrights 2021-2022
+# Copyrights 2021-2023
 
 # PUBLIC
 # --------------------------------------
@@ -28,7 +28,7 @@ cVersion=17 # 89, 99, 11, 17
 # DO NOT CHANGE THESE CONFIG VARIABLES
 # > PASS THROUGH THE COMMAND
 
-version=0.1.1
+version=0.1.2
 
 srcFileExt="cpp"
 hdrFileExt="hpp"
@@ -37,7 +37,7 @@ guard="ifndef" # ifndef | pragma
 # PROJECT MODE :
 # 0: src/ClassName.cpp include/ClassName.hpp
 # 1: src/ClassDir/ClassName.cpp src/ClassDir/ClassName.hpp
-projectMode=0
+projectMode=1
 
 # if any mode is precised, then release is the default one
 mode="debug"
@@ -47,15 +47,17 @@ rule="build"
 ext=""
 os="linux"
 
+calledCommand="$(basename -- ${0%%.*})"
+
 #
 updateUrl="https://raw.githubusercontent.com/NoxFly/c-cpp-project-script/main/run.sh"
 
 # declare -a optionsList
 helpMessage="
 C/C++ run script v$version
-Usage : $(basename -- $0) [OPTION]
-        $(basename -- $0) -g to generate project's structure.
-        $(basename -- $0) [--dev|-d|-r] to compile and run the program in [dev(default)|debug|release] mode.
+Usage : $calledCommand [OPTION]
+        $calledCommand -g to generate project's structure.
+        $calledCommand [--dev|-d|-r] to compile and run the program in [dev(default)|debug|release] mode.
 All added options not handled by the script will be executable's options.
 
 \033[1;21mOPTIONS:\033[0m\n
@@ -264,8 +266,8 @@ createBaseProject() {
     if [ ! -f "Makefile" ]; then
         touch "Makefile"
         echo -e "$makefileCode"  | base64 --decode > "Makefile"
-        updateMakefile
         [ $? -eq 0 ] && log "Created Makefile"
+        updateMakefile
         ((i=i+1))
     fi
 
@@ -522,7 +524,7 @@ compile()
 launch()
 {
     if [ ! -d "$srcDir" ] || [ $projectMode -eq 0 -a ! -d "$incDir" ]; then
-        echo -e "There's no project's structure.\nTo create it, write $0 -g"
+        echo -e "There's no project's structure.\nTo create it, write \`$calledCommand -g\`"
         exit 1
     fi
 
@@ -712,8 +714,14 @@ if [ $# -gt 0 ]; then
             runAfterCompile=0
             launch $@;;
 
-	# compile [and run project if not built as lib]
-        "--static" | "--shared" | *)
+        "--static")
+            compile "static";;
+
+        "--shared")
+            compile "shared";;
+
+	    # compile [and run project if not built as lib]
+        *)
             launch $@;;
     esac
 else
